@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Simple sample of using Ruby on Lambda with Layers
+
+Resources:
+  MyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: sample/
+      Handler: app.lambda_handler
+      Runtime: ruby2.5
+      Layers:
+        - !Ref MyLayer
+      Events:
+        Get:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get
+
+  MyLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: my-first-layer
+      Description: A sample Ruby layer
+      ContentUri: layer/layer.zip
+      CompatibleRuntimes:
+        - ruby2.5
+      RetentionPolicy: Delete
+
+Outputs:
+  MyApi:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"

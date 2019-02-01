@@ -1,0 +1,3 @@
+source "https://rubygems.org"
+
+# no gems, but needed for sam build to succeed
